@@ -7,10 +7,6 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     naersk = {
       url = "github:nix-community/naersk";
       inputs = {
@@ -27,7 +23,6 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ inputs.devshell.flakeModule ];
       systems = [ "x86_64-linux" ];
       perSystem =
         { pkgs, system, ... }:
@@ -37,22 +32,50 @@
             cargo = toolchain;
             rustc = toolchain;
           };
+          libs = with pkgs; [
+            llvmPackages.libclang
+
+            wayland
+            # X11 dependencies
+            libGL
+            libx11
+            libx11.dev
+            libxcursor
+            libxi
+            libxinerama
+            libxrandr
+
+            alsa-lib
+            libpulseaudio
+          ];
         in
         {
           packages.default = naersk'.buildPackage {
             pname = "vector-implementation";
             src = ./.;
+            nativeBuildInputs =
+              with pkgs;
+              [
+                cmake
+                pkg-config
+                clang
+              ]
+              ++ libs;
+            env.LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
           };
 
-          devshells.default = {
-            packages = [ toolchain ];
-            devshell.motd = "\\";
-            env = [
-              {
-                name = "RUST_SRC_PATH";
-                value = "${rust-src}/lib/rustlib/src/rust/library";
-              }
-            ];
+          devShells.default = pkgs.mkShell {
+            nativeBuildInputs =
+              with pkgs;
+              [
+                toolchain
+                cmake
+                pkg-config
+                clang
+              ]
+              ++ libs;
+            env.LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+            env.RUST_SRC_PATH = "${rust-src}/lib/rustlib/src/rust/library";
           };
         };
     };
