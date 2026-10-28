@@ -1,5 +1,5 @@
 {
-  description = "Godot development environment";
+  description = "Rust development Shell";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
@@ -35,18 +35,25 @@
           libs = with pkgs; [
             llvmPackages.libclang
 
-            wayland
-            # X11 dependencies
+            glfw3
+            ## glfw
             libGL
             libx11
-            libx11.dev
             libxcursor
-            libxi
-            libxinerama
+            libxext
             libxrandr
+            libxxf86vm
+            wayland
+            libdecor
+            libxkbcommon
+            libxinerama
+            libxi
 
+            ## openal
             alsa-lib
+            libjack2
             libpulseaudio
+            pipewire
           ];
         in
         {
@@ -62,6 +69,7 @@
               ]
               ++ libs;
             env.LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+            env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath libs;
           };
 
           devShells.default = pkgs.mkShell {
@@ -76,6 +84,7 @@
               ++ libs;
             env.LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
             env.RUST_SRC_PATH = "${rust-src}/lib/rustlib/src/rust/library";
+            env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath libs;
           };
         };
     };

@@ -1,7 +1,7 @@
 [package]
-name = "vector-implementation"
-version = "0.1.0"
-edition = "2024"
+  name    = "vector-implementation"
+  version = "0.1.0"
+  edition = "2024"
 
 [dependencies]
-raylib = "6.0.0"
+  raylib = { version = "6.0.0", features = ["wayland"] }
