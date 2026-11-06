@@ -92,4 +92,8 @@ impl Vec2 {
     pub fn dot(self, rhs: Self) -> i32 {
         self.x * rhs.x + self.y * rhs.y
     }
+
+    pub fn cross(self, rhs: Self) -> i32 {
+        self.x * rhs.y - self.y * rhs.x
+    }
 }
