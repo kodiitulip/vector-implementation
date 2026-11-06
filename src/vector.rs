@@ -1,4 +1,4 @@
-use std::ops::{Add, Div, Mul, Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vec2 {
@@ -29,6 +29,17 @@ impl Sub for Vec2 {
         Self {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
+        }
+    }
+}
+
+impl Neg for Vec2 {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        Self {
+            x: -self.x,
+            y: -self.y,
         }
     }
 }
@@ -74,5 +85,11 @@ impl Mul<i32> for Vec2 {
             x: self.x * rhs,
             y: self.y * rhs,
         }
+    }
+}
+
+impl Vec2 {
+    pub fn dot(self, rhs: Self) -> i32 {
+        self.x * rhs.x + self.y * rhs.y
     }
 }

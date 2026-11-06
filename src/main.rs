@@ -1,4 +1,4 @@
-use crate::vector::{RIGHT, Vec2};
+use crate::vector::{DOWN, RIGHT, Vec2};
 use raylib::prelude::*;
 
 mod vector;
@@ -12,9 +12,11 @@ fn main() {
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::RAYWHITE);
-        let pos = Vec2 { x: 20, y: 20 };
-        let opos = pos + Vec2 { x: 30, y: 3 };
+        let pos = (RIGHT + DOWN) * 20;
+        let opos = Vec2 { x: 30, y: -3 };
         d.draw_line(0, 0, pos.x, pos.y, Color::BLACK);
-        d.draw_line(0, 0, opos.x, opos.y, Color::RED);
+        d.draw_line(pos.x, pos.y, (pos + opos).x, (pos + opos).y, Color::RED);
+        let dp = pos.dot(opos);
+        d.draw_text(&*format!("pos . opos = {dp}"), 20, 20, 16, Color::BLACK);
     }
 }
