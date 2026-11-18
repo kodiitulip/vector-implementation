@@ -5,6 +5,7 @@ fn main() {
     let (mut rl, thread) = raylib::init()
         .size(640, 640)
         .title("Vector Operations")
+        .log_level(TraceLogLevel::LOG_ERROR)
         .build();
 
     while !rl.window_should_close() {

@@ -1,8 +1,6 @@
-use crate::vector::Vec2;
 use rand::prelude::*;
 use raylib::prelude::*;
-
-mod vector;
+use vector_implementation::vector::Vec2;
 
 fn main() {
     let (mut rl, thread) = raylib::init()
@@ -19,7 +17,13 @@ fn main() {
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::RAYWHITE);
-        draw_text(&mut d,"Controls:\nLMB: Create Line\t\tRMB: Randomize Points Order\t\t ESC: Quit", Vec2::new(10., 10.), 16, Color::BLACK);
+        draw_text(
+            &mut d,
+            "Controls:\nLMB: Create Line\t\tRMB: Randomize Points Order\t\t ESC: Quit",
+            Vec2::new(10., 10.),
+            16,
+            Color::BLACK,
+        );
 
         let mouse_pos: Vec2 = d.get_mouse_position().into();
 
@@ -55,12 +59,7 @@ fn draw_arrow(d: &mut RaylibDrawHandle, start_pos: Vec2, end_pos: Vec2, thick: f
     let angle = (end_pos - start_pos).angle_to(Vec2::RIGHT).to_degrees();
     guard.rl_translatef(end_pos.x, end_pos.y, 0.0);
     guard.rl_rotatef(angle, 0., 0., 1.);
-    guard.draw_triangle(
-        Vec2::ZERO,
-        Vec2::new(-10., -6.),
-        Vec2::new(-10., 6.),
-        color,
-    );
+    guard.draw_triangle(Vec2::ZERO, Vec2::new(-10., -6.), Vec2::new(-10., 6.), color);
     drop(guard)
 }
 

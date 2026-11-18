@@ -1,11 +1,12 @@
 # Implementação de Vetor / Posição 2D em RUST
 
 Rode com
+
 ```shell
-cargo run
+cargo run --example <exemplo>
 ```
 
-Um exemplo está disponível também em
-```shell
-cargo run --example operations
-```
+Exemplos:
+
+- [Vector Operations (operations)](./examples/operations.rs)
+- [N Vector Sum (vector-sum)](./examples/vector-sum.rs)
