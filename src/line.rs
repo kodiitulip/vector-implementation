@@ -42,7 +42,7 @@ impl Line {
 
         // Se s3 e s4 não tem o mesmo sinal, A e B estao no mesmo lado de CD.
         // Logo, ha interseção.
-        return s3 * s4 < 0.0;
+        s3 * s4 < 0.0
     }
 
     pub fn normal(self) -> Vec2 {

@@ -95,7 +95,7 @@ fn main() {
         let dot = a.dot(b);
         draw_text(
             &mut d,
-            &*format!("[100, 0] dot [0, 20] = {dot}"),
+            &format!("[100, 0] dot [0, 20] = {dot}"),
             origin + Vec2::new(20., 10.),
             Color::RED,
         );
@@ -121,7 +121,7 @@ fn main() {
         let cross = a.cross(b);
         draw_text(
             &mut d,
-            &*format!("[100, 0] cross [0, 20] = {cross}"),
+            &format!("[100, 0] cross [0, 20] = {cross}"),
             origin + Vec2::new(20., 10.),
             Color::RED,
         );
