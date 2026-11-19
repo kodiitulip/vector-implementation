@@ -48,4 +48,4 @@ jobs:
           packages: libasound2-dev libudev-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
           version: 1.0
       - name: Run clippy action
-        uses: clechasseur/rs-clippy-check@v3
+        uses: clechasseur/rs-clippy-check@v5
