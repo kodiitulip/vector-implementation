@@ -9,7 +9,7 @@ fn main() {
         .build();
 
     let mut mouse = Line::new(Vec2::ZERO, Vec2::ZERO);
-    let mut wall: Line = (Vec2::new(0., 300.), Vec2::new(800., 300.)).into();
+    let mut wall: Line = (Vec2::new(40., 300.), Vec2::new(800., 300.)).into();
     while !rl.window_should_close() {
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::RAYWHITE);
