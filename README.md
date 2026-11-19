@@ -10,3 +10,4 @@ Exemplos:
 
 - [Vector Operations (operations)](./examples/operations.rs)
 - [N Vector Sum (vector-sum)](./examples/vector-sum.rs)
+- [Intersection (intersection)](./examples/intersection.rs)

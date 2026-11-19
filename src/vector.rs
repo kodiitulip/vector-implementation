@@ -1,8 +1,10 @@
 #![allow(dead_code)]
 
+use raylib::ffi::Vector2;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-use raylib::ffi::Vector2;
+const EPSILON: f32 = 1e-6;
+const EPSILON_SQUARED: f32 = EPSILON * EPSILON;
 
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub struct Vec2 {
@@ -22,6 +24,13 @@ impl Vec2 {
         Self { x, y }
     }
 
+    pub fn from_angle(theta: f32) -> Self {
+        Self {
+            x: theta.cos(),
+            y: theta.sin(),
+        }
+    }
+
     pub fn dot(self, rhs: Self) -> f32 {
         self.x * rhs.x + self.y * rhs.y
     }
@@ -31,7 +40,11 @@ impl Vec2 {
     }
 
     pub fn len(self) -> f32 {
-        f32::sqrt(self.x.powf(2.) + self.y.powf(2.))
+        f32::sqrt(self.len_squared())
+    }
+
+    pub fn len_squared(self) -> f32 {
+        self.x.powf(2.) + self.y.powf(2.)
     }
 
     pub fn project(self, rhs: Self) -> Self {
@@ -44,8 +57,33 @@ impl Vec2 {
         self / self.len()
     }
 
+    pub fn is_normalized(self) -> bool {
+        (self.len_squared() - 1.).abs() <= EPSILON_SQUARED
+    }
+
     pub fn angle_to(self, rhs: Self) -> f32 {
         f32::atan2(self.y - rhs.y, self.x - rhs.x)
+    }
+
+    pub fn rotated(self, theta: f32) -> Self {
+        let st = theta.sin();
+        let ct = theta.cos();
+        Self {
+            x: ct * self.x - st * self.y,
+            y: st * self.x + ct * self.y,
+        }
+    }
+
+    pub fn bounce(self, normal: Self) -> Self {
+        self - (normal * self.dot(normal) * 2.)
+    }
+
+    pub fn reflect(self, normal: Self) -> Self {
+        2. * self.project(normal) - self
+    }
+
+    pub fn is_parallel(self, rhs: Self) -> bool {
+        self.cross(rhs).abs() <= EPSILON
     }
 }
 
@@ -125,6 +163,17 @@ impl Div<f32> for Vec2 {
     }
 }
 
+impl Div<Vec2> for f32 {
+    type Output = Vec2;
+
+    fn div(self, rhs: Vec2) -> Self::Output {
+        Vec2 {
+            x: rhs.x / self,
+            y: rhs.y / self,
+        }
+    }
+}
+
 impl DivAssign<f32> for Vec2 {
     fn div_assign(&mut self, rhs: f32) {
         self.x /= rhs;
@@ -143,13 +192,6 @@ impl Mul for Vec2 {
     }
 }
 
-impl MulAssign for Vec2 {
-    fn mul_assign(&mut self, rhs: Self) {
-        self.x *= rhs.x;
-        self.y *= rhs.y;
-    }
-}
-
 impl Mul<f32> for Vec2 {
     type Output = Self;
 
@@ -161,10 +203,28 @@ impl Mul<f32> for Vec2 {
     }
 }
 
+impl Mul<Vec2> for f32 {
+    type Output = Vec2;
+
+    fn mul(self, rhs: Vec2) -> Self::Output {
+        Vec2 {
+            x: rhs.x * self,
+            y: rhs.y * self,
+        }
+    }
+}
+
 impl MulAssign<f32> for Vec2 {
     fn mul_assign(&mut self, rhs: f32) {
         self.x *= rhs;
         self.y *= rhs;
+    }
+}
+
+impl MulAssign for Vec2 {
+    fn mul_assign(&mut self, rhs: Self) {
+        self.x *= rhs.x;
+        self.y *= rhs.y;
     }
 }
 
@@ -179,6 +239,24 @@ impl From<Vec2> for Vector2 {
 
 impl From<Vector2> for Vec2 {
     fn from(value: Vector2) -> Self {
+        Self {
+            x: value.x,
+            y: value.y,
+        }
+    }
+}
+
+impl From<&Vec2> for Vector2 {
+    fn from(value: &Vec2) -> Self {
+        Self {
+            x: value.x,
+            y: value.y,
+        }
+    }
+}
+
+impl From<&Vector2> for Vec2 {
+    fn from(value: &Vector2) -> Self {
         Self {
             x: value.x,
             y: value.y,

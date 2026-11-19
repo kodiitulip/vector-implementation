@@ -1,9 +1,17 @@
+#![allow(dead_code)]
+
 use crate::vector::Vec2;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Line {
-    p1: Vec2,
-    p2: Vec2,
+    pub p1: Vec2,
+    pub p2: Vec2,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+pub struct Intersection {
+    pub point: Vec2,
+    pub normal: Vec2,
 }
 
 impl Line {
@@ -35,5 +43,41 @@ impl Line {
         // Se s3 e s4 não tem o mesmo sinal, A e B estao no mesmo lado de CD.
         // Logo, ha interseção.
         return s3 * s4 < 0.0;
+    }
+
+    pub fn normal(self) -> Vec2 {
+        let v = self.p2 - self.p1;
+        Vec2::new(v.y, -v.x).normalized()
+    }
+
+    pub fn direction(self) -> Vec2 {
+        (self.p2 - self.p1).normalized()
+    }
+
+    pub fn intersection(self, rhs: Line) -> Option<Intersection> {
+        let r_line = self.p2 - self.p1;
+        let l_line = rhs.p2 - rhs.p1;
+        let normal = Vec2::new(-l_line.y, l_line.x);
+
+        let dotn = r_line.dot(normal);
+        if dotn.abs() < 1e-8 {
+            return None;
+        }
+
+        let t = (rhs.p1 - self.p1).cross(l_line) / r_line.cross(l_line);
+        // let u = (rhs.p1 - self.p1).cross(r_line) / r_line.cross(l_line);
+        Some(Intersection {
+            point: self.p1 + r_line * t,
+            normal: rhs.normal(),
+        })
+    }
+}
+
+impl From<(Vec2, Vec2)> for Line {
+    fn from(value: (Vec2, Vec2)) -> Self {
+        Line {
+            p1: value.0,
+            p2: value.1,
+        }
     }
 }
