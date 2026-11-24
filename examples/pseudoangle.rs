@@ -1,8 +1,5 @@
-use raylib::{
-    ffi::{CSSPalette, RaylibPalette},
-    prelude::*,
-};
-use vector_implementation::{Line, Vec2, create_carteasian_grid, draw_arrow};
+use raylib::prelude::*;
+use vector_implementation::{Line, Vec2, create_carteasian_grid};
 
 fn main() {
     let (mut rl, thread) = raylib::init()
