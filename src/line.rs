@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+use raylib::prelude::{Color, RaylibDraw, RaylibDrawHandle};
+
 use crate::vector::Vec2;
 
 #[derive(Debug, Clone, Copy)]
@@ -70,6 +72,22 @@ impl Line {
             point: self.p1 + r_line * t,
             normal: rhs.normal(),
         })
+    }
+
+    pub fn len_squared(self) -> f32 {
+        (self.p2 - self.p1).len_squared()
+    }
+
+    pub fn len(self) -> f32 {
+        self.len_squared().sqrt()
+    }
+
+    pub fn is_degenerate(self) -> bool {
+        self.len_squared() <= 1e-12
+    }
+
+    pub fn draw(self, d: &mut RaylibDrawHandle, thick: f32, color: Color) {
+        d.draw_line_ex(self.p1, self.p2, thick, color);
     }
 }
 

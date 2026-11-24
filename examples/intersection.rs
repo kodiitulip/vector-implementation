@@ -1,5 +1,5 @@
 use raylib::prelude::*;
-use vector_implementation::{Line, Vec2};
+use vector_implementation::{Line, Vec2, draw_arrow, draw_text, draw_wall};
 
 fn main() {
     let (mut rl, thread) = raylib::init()
@@ -51,22 +51,4 @@ fn main() {
             _ => (),
         }
     }
-}
-
-fn draw_wall(d: &mut RaylibDrawHandle, start_pos: Vec2, end_pos: Vec2, color: Color) {
-    d.draw_line_ex(start_pos, end_pos, 5., color);
-}
-
-fn draw_arrow(d: &mut RaylibDrawHandle, start_pos: Vec2, end_pos: Vec2, thick: f32, color: Color) {
-    d.draw_line_ex(start_pos, end_pos, thick, color);
-    let mut guard = d.rl_push_matrix();
-    let angle = (end_pos - start_pos).angle_to(Vec2::RIGHT).to_degrees();
-    guard.rl_translatef(end_pos.x, end_pos.y, 0.0);
-    guard.rl_rotatef(angle, 0., 0., 1.);
-    guard.draw_triangle(Vec2::ZERO, Vec2::new(-10., -6.), Vec2::new(-10., 6.), color);
-    drop(guard);
-}
-
-fn draw_text(d: &mut RaylibDrawHandle, text: &str, position: Vec2, font_size: i32, color: Color) {
-    d.draw_text(text, position.x as i32, position.y as i32, font_size, color);
 }

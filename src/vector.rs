@@ -65,6 +65,64 @@ impl Vec2 {
         f32::atan2(self.y - rhs.y, self.x - rhs.x)
     }
 
+    pub fn angle_to_cross(self, rhs: Self) -> f32 {
+        let sin_theta = self.normalized().cross(rhs.normalized()).clamp(-1., 1.);
+        sin_theta.asin()
+    }
+
+    pub fn pseudo_angle_to(self, rhs: Self) -> f32 {
+        let top = self.dot(rhs);
+        let bottom = self.len() * rhs.len();
+        1. - (top / bottom).clamp(-1., 1.)
+    }
+
+    pub fn pseudo_angle_square(self) -> f32 {
+        let x = self.x;
+        let y = self.y;
+        let ax = x.abs();
+        let ay = y.abs();
+
+        if x >= 0. {
+            if y >= 0. {
+                if ax >= ay { ay / ax } else { 2. - ax / ay }
+            } else {
+                if ax >= ay { 8. - ay / ax } else { 6. + ax / ay }
+            }
+        } else {
+            if y >= 0. {
+                if ax >= ay { 4. - ay / ax } else { 2. + ax / ay }
+            } else {
+                if ax >= ay { 4. + ay / ax } else { 6. - ax / ay }
+            }
+        }
+    }
+
+    pub fn pseudo_angle_square_arith(self) -> f32 {
+        let ax = self.x.abs();
+        let ay = self.y.abs();
+        let r = ax.min(ay) / ax.max(ay);
+
+        // "diamond" coordinate in [0, 4) for one quadrant:
+        //   ax >= ay  ->  r          (0..1)
+        //   ax <  ay  ->  2 - r      (1..2)
+        let q = if ax >= ay { r } else { 2.0 - r };
+        let q = if self.x < 0. { 4. - q } else { q };
+        if self.y < 0. { 8. - q } else { q }
+    }
+
+    pub fn pseudo_angle_square_to(self, rhs: Self) -> f32 {
+        let a = self.pseudo_angle_square_arith();
+        let b = rhs.pseudo_angle_square_arith();
+
+        let pseudo = b - a;
+        if pseudo < 0. { pseudo + 8. } else { pseudo }
+    }
+
+    pub fn angle_to_dot(self, rhs: Self) -> f32 {
+        let cos_theta = self.normalized().dot(rhs.normalized()).clamp(-1., 1.);
+        cos_theta.acos()
+    }
+
     pub fn rotated(self, theta: f32) -> Self {
         let st = theta.sin();
         let ct = theta.cos();

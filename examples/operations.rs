@@ -1,5 +1,5 @@
 use raylib::prelude::*;
-use vector_implementation::vector::Vec2;
+use vector_implementation::{draw_text, vector::Vec2};
 
 fn main() {
     let (mut rl, thread) = raylib::init()
@@ -16,9 +16,10 @@ fn main() {
             &mut d,
             "Vector Operations",
             Vec2::new(10., 10.),
+            16,
             Color::BLACK,
         );
-        draw_text(&mut d, "Addition", Vec2::new(10., 30.), Color::BLACK);
+        draw_text(&mut d, "Addition", Vec2::new(10., 30.), 16, Color::BLACK);
 
         let origin = Vec2::new(10., 60.);
         let a = Vec2::new(150., 0.);
@@ -38,7 +39,7 @@ fn main() {
             Color::GREEN,
         );
 
-        draw_text(&mut d, "Subtraction", Vec2::new(10., 80.), Color::BLACK);
+        draw_text(&mut d, "Subtraction", Vec2::new(10., 80.), 16, Color::BLACK);
 
         let origin = Vec2::new(10., 100.);
 
@@ -60,6 +61,7 @@ fn main() {
             &mut d,
             "Scalar Multiplication",
             Vec2::new(10., 120.),
+            16,
             Color::BLACK,
         );
 
@@ -72,12 +74,13 @@ fn main() {
             2.,
             Color::GREEN,
         );
-        draw_text(&mut d, "x2", origin + Vec2::DOWN * 6., Color::RED);
+        draw_text(&mut d, "x2", origin + Vec2::DOWN * 6., 16, Color::RED);
 
         draw_text(
             &mut d,
             "Scalar Product / Dot Product",
             Vec2::new(10., 180.),
+            16,
             Color::BLACK,
         );
 
@@ -97,6 +100,7 @@ fn main() {
             &mut d,
             &format!("[100, 0] dot [0, 20] = {dot}"),
             origin + Vec2::new(20., 10.),
+            16,
             Color::RED,
         );
 
@@ -104,6 +108,7 @@ fn main() {
             &mut d,
             "Vectorial Product / Cross Product",
             Vec2::new(10., 240.),
+            16,
             Color::BLACK,
         );
 
@@ -123,10 +128,11 @@ fn main() {
             &mut d,
             &format!("[100, 0] cross [0, 20] = {cross}"),
             origin + Vec2::new(20., 10.),
+            16,
             Color::RED,
         );
 
-        draw_text(&mut d, "Projection", Vec2::new(10., 300.), Color::BLACK);
+        draw_text(&mut d, "Projection", Vec2::new(10., 300.), 16, Color::BLACK);
 
         let origin = Vec2::new(10., 320.);
         let a = Vec2::new(100., 0.);
@@ -146,8 +152,4 @@ fn main() {
             Color::GREEN,
         );
     }
-}
-
-fn draw_text(d: &mut RaylibDrawHandle, text: &str, position: Vec2, tint: impl Into<Color>) {
-    d.draw_text(text, position.x as i32, position.y as i32, 16, tint);
 }

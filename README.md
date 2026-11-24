@@ -10,6 +10,7 @@ cargo run --example <exemplo>
 
 Exemplos:
 
-- [Vector Operations (operations)](./examples/operations.rs)
-- [N Vector Sum (vector-sum)](./examples/vector-sum.rs)
-- [Intersection (intersection)](./examples/intersection.rs)
+- [operations](./examples/operations.rs)
+- [vector-sum](./examples/vector-sum.rs)
+- [intersection](./examples/intersection.rs)
+- [pseudoangle](./examples/pseudoangle.rs)
